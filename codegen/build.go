@@ -84,20 +84,18 @@ func (cfg *Config) bind() (*Build, error) {
 		SchemaRaw:   cfg.SchemaStr,
 	}
 
-	if qr, ok := cfg.schema.EntryPoints["query"]; ok {
-		b.QueryRoot = b.Objects.ByName(qr.TypeName())
-	}
-
-	if mr, ok := cfg.schema.EntryPoints["mutation"]; ok {
-		b.MutationRoot = b.Objects.ByName(mr.TypeName())
-	}
-
-	if sr, ok := cfg.schema.EntryPoints["subscription"]; ok {
-		b.SubscriptionRoot = b.Objects.ByName(sr.TypeName())
-	}
-
-	if b.QueryRoot == nil {
+	if cfg.schema.Query != nil {
+		b.QueryRoot = b.Objects.ByName(cfg.schema.Query.Name)
+	} else {
 		return b, fmt.Errorf("query entry point missing")
+	}
+
+	if cfg.schema.Mutation != nil {
+		b.MutationRoot = b.Objects.ByName(cfg.schema.Mutation.Name)
+	}
+
+	if cfg.schema.Subscription != nil {
+		b.SubscriptionRoot = b.Objects.ByName(cfg.schema.Subscription.Name)
 	}
 
 	// Poke a few magic methods into query

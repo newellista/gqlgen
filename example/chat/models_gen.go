@@ -7,8 +7,17 @@ import (
 )
 
 type Message struct {
-	ID        string    `json:"id"`
-	Text      string    `json:"text"`
-	CreatedBy string    `json:"createdBy"`
-	CreatedAt time.Time `json:"createdAt"`
+	ID        *string    `json:"id"`
+	Text      *string    `json:"text"`
+	CreatedBy *string    `json:"createdBy"`
+	CreatedAt *time.Time `json:"createdAt"`
+}
+type Mutation struct {
+	Post *Message `json:"post"`
+}
+type Query struct {
+	Room Chatroom `json:"room"`
+}
+type Subscription struct {
+	MessageAdded *Message `json:"messageAdded"`
 }
